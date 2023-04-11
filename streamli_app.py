@@ -91,17 +91,7 @@ def process_file(path, preview_mode=False, first_chapter=0, last_chapter=math.in
         if exists(json_path):
             values = read_json(json_path)
         else:
-            values = read_epub(path, json_path, preview_mode, first_chapter, last_chapter)
-        else:
-             print('Generating embeddings for chapters {}-{} in "{}"\n'.format(first_chapter, last_chapter, path))
-        paras = [para for chapter in chapters for para in chapter['paras']]
-        embeddings = get_embeddings(paras)
-        try:
-            with open(json_path, 'w') as f:
-                json.dump({'chapters': chapters, 'embeddings': embeddings.tolist()}, f)
-        except:
-            print('Failed to save embeddings to "{}"'.format(json_path))
-        return (chapters, embeddings)
+            values = read_epub(path, json_path, preview_mode, first_chapter, last_chapter) 
     else:
         print('Invalid file format. Either upload an epub or a json of book embeddings.')        
     return values
