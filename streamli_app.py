@@ -28,13 +28,14 @@ def download_file():
 # Download the file and get the path to the downloaded file
 path = download_file()
 
+# Create a Google Authentication connection object
+scope = ['https://spreadsheets.google.com/feeds',
+         'https://www.googleapis.com/auth/drive']
+
 credentials = service_account.Credentials.from_service_account_info(
-    st.secrets["gcp_service_account"],
-    scopes=[
-        "https://www.googleapis.com/auth/spreadsheets",
-    ],
-)
-#conn = connect(credentials=credentials)
+                st.secrets["gcp_service_account"], scopes = scope)
+client = Client(scope=scope,creds=credentials)
+
 
 # Set up the OpenAI API key
 openai.api_key = st.secrets["api_secret"]
