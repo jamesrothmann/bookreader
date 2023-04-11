@@ -8,3 +8,4 @@ google-auth-httplib2
 pandas
 numpy
 gsheetsdb
+gspread_pandas
