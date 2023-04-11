@@ -148,8 +148,8 @@ if submit_button:
             })
         # Ask follow-up questions
         prompt = "Think like the best podcast interviewer. What will be the {} best follow-up questions to ask?\n".format(num_follow_up_questions)
-        for i in range(num_follow_up_questions):
-            follow_up_question = st.text_input(prompt + "Question {}: ".format(i + 1))
+        for i, follow_up_question in enumerate(follow_up_questions):
+            follow_up_question = st.text_input(prompt + "Question {}: ".format(i + 1), key=f"question_{i}")
             if follow_up_question.strip():
                 # Search the ebook with follow-up question
                 search_results = search(follow_up_question, embeddings)
