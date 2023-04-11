@@ -164,7 +164,7 @@ if submit_button:
     for question in initial_questions:
         search_results = search(question, embeddings)
         
-        prompt1 = "The below are extracts based on a semantic search from a book or a podcast transcript. \nI want you to extract lessons or principles or secrets for success, building wealth, business advice and/or investing in a table in the following format: \n\n|Question| Paragraph/Sentence/Quote\t|30 Word Summary |Tag 1|Tag 2|Tag 3|Tag 4|Tag 5|7 Word Problem Summary| Emotion Triggered | Counter-Intuitive or Counter-Narrative or Elegant Articulation|\n\nParagraph/Sentence/Quote - This must be an extract from the text. It must be either counter-intuitive (Not how I expected the world to work) or counter-narrative (Not how I was told it works), or be elegantly articulated (wish that I could have said it like that). \n\nEmotion Triggered: | LOL – That’s so funny| WTF – That pisses me off | AWW – That’s so cute | WOW – That’s amazing | NSFW – That’s Crazy| OHHHH – Now I Get it | FINALLY – someone said what I feel| YAY – That’s great news|\n\nExtract:\n"
+        prompt1 = f"The below are extracts based on a semantic search from a book or a podcast transcript with the name '{book_podcast_name}' in response to the question '{question}'. \nI want you to extract lessons or principles or secrets for success, building wealth, business advice and/or investing in a table in the following format: \n\n|Question| Paragraph/Sentence/Quote\t|30 Word Summary |Tag 1|Tag 2|Tag 3|Tag 4|Tag 5|7 Word Problem Summary| Emotion Triggered | Counter-Intuitive or Counter-Narrative or Elegant Articulation|\n\nParagraph/Sentence/Quote - This must be an extract from the text. It must be either counter-intuitive (Not how I expected the world to work) or counter-narrative (Not how I was told it works), or be elegantly articulated (wish that I could have said it like that). \n\nEmotion Triggered: | LOL – That’s so funny| WTF – That pisses me off | AWW – That’s so cute | WOW – That’s amazing | NSFW – That’s Crazy| OHHHH – Now I Get it | FINALLY – someone said what I feel| YAY – That’s great news|\n\nExtract:\n"
 
         search_results_text = "\n".join(search_results)
         prompt1_with_results = f"{prompt1}\n{search_results_text}"
@@ -178,7 +178,6 @@ if submit_button:
         st.write(df)
 
     st.success("Task Completed")
-    st.write(results_df)
         # ... (existing code) ...
 
     # Save the raw API responses to a text file
