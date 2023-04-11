@@ -24,7 +24,8 @@ def authenticate_and_connect(sheet_id):
 
 @st.cache_resource
 def download_file():
-    url = "https://drive.google.com/uc?export=download&id=1e_bneSaNGhY77Nt07RhTjcMekvwHRGjS"
+    url = "https://drive.google.com/uc?export=download&id=1eaypC-XqCGKn56VZRIQdlwsYHwIbQUJr" #Zero to One  - Peter Thiel
+    #url = "https://drive.google.com/uc?export=download&id=1e_bneSaNGhY77Nt07RhTjcMekvwHRGjS" #David Senra Podcast Transcripts
     path = "file.json"
 
     # Use urllib.request.urlretrieve to download the file from the given URL
