@@ -12,6 +12,7 @@ import pandas as pd
 import math
 import urllib.request
 from gspread_pandas import Spread,Client
+import base64
 #from gsheetsdb import connect
 
 
@@ -135,10 +136,21 @@ initial_questions = st.text_area("C) Input for List of Initial Questiuons (One p
 num_follow_up_questions = st.slider("D) Amount of follow-up questions", 1, 10)
 submit_button = st.button("Submit")
 
+raw_api_responses = [] 
+
 def append_to_dataframe(df, data):
     data_string = StringIO(data)
     new_df = pd.read_csv(data_string, sep='|')
     return pd.concat([df, new_df], ignore_index=True)
+
+def save_responses_to_file(responses, filename):
+    with open(filename, 'w') as f:
+        json.dump(responses, f, indent=2)
+
+def get_download_link(filename, text):
+    b64 = base64.b64encode(text.encode()).decode()
+    return f'<a href="data:file/txt;base64,{b64}" download="{filename}">Download {filename}</a>'
+
 
 if submit_button:
     columns = ["Question", "Paragraph/Sentence/Quote", "30 Word Summary", "Tag 1", "Tag 2", "Tag 3", "Tag 4", "Tag 5", "7 Word Problem Summary", "Emotion Triggered", "Counter-Intuitive or Counter-Narrative or Elegant Articulation"]
@@ -153,12 +165,14 @@ if submit_button:
         prompt1_with_results = f"{prompt1}\n{search_results_text}"
 
         api_response = openaiapi(prompt1_with_results)
+        raw_api_responses.append(response.choices[0].to_dict())
 
         results_df = append_to_dataframe(results_df, api_response)
 
         prompt2 = f"Think like the best podcast interviewer. What will be the  {num_follow_up_questions} best follow-up questions to ask?\n\nQuestion 1: \n"
 
         follow_up_api_response = openaiapi(f"{prompt2}\n{api_response}")
+        raw_api_responses.append(response.choices[0].to_dict())
 
         follow_up_questions = follow_up_api_response.split("\n")
         for follow_up_question in follow_up_questions:
@@ -168,3 +182,17 @@ if submit_button:
 
     st.success("Task Completed")
     st.write(results_df)
+        # ... (existing code) ...
+
+    # Save the raw API responses to a text file
+    output_filename = 'raw_api_responses.json'
+    save_responses_to_file(raw_api_responses, output_filename)
+
+    # Display the download link
+    with open(output_filename, 'r') as f:
+        text = f.read()
+        download_link = get_download_link(output_filename, text)
+        st.markdown(download_link, unsafe_allow_html=True)
+
+    
+    
