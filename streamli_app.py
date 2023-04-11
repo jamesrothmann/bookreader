@@ -150,6 +150,15 @@ def get_download_link(filename, text):
     b64 = base64.b64encode(text.encode()).decode()
     return f'<a href="data:file/txt;base64,{b64}" download="{filename}">Download {filename}</a>'
 
+def parse_content_to_dataframe(content):
+    lines = content.split("\n")
+    header = lines[0].split("|")[1:-1]  # Get the header row and remove the first and last empty strings
+    data = []
+    for line in lines[2:]:  # Start at index 2 to skip the header and the dashed separator line
+        row = line.split("|")[1:-1]  # Remove the first and last empty strings
+        data.append(row)
+    return pd.DataFrame(data, columns=header)
+
 
 if submit_button:
     columns = ["Question", "Paragraph/Sentence/Quote", "30 Word Summary", "Tag 1", "Tag 2", "Tag 3", "Tag 4", "Tag 5", "7 Word Problem Summary", "Emotion Triggered", "Counter-Intuitive or Counter-Narrative or Elegant Articulation"]
@@ -167,23 +176,25 @@ if submit_button:
         api_response = openaiapi(prompt1_with_results)
         raw_api_responses.append(api_response.choices[0].to_dict())  # Save the raw JSON response
         text_response = api_response.choices[0].message['content'].strip()  # Extract the text content
-        results_df = append_to_dataframe(results_df, text_response)  # Pass the text content
+        content = follow_up_api_response.choices[0].message['content'].strip()
+        df = parse_content_to_dataframe(content)
+        st.write(df)
 
-        prompt2 = f"Think like the best podcast interviewer. What will be the  {num_follow_up_questions} best follow-up questions to ask?\n\nQuestion 1: \n"
+        #prompt2 = f"Think like the best podcast interviewer. What will be the  {num_follow_up_questions} best follow-up questions to ask?\n\nQuestion 1: \n"
 
-        follow_up_api_response = openaiapi(f"{prompt2}\n{api_response}")
-        raw_api_responses.append(follow_up_api_response.choices[0].to_dict())
+        #follow_up_api_response = openaiapi(f"{prompt2}\n{api_response}")
+        #raw_api_responses.append(follow_up_api_response.choices[0].to_dict())
         
-        follow_up_api_response = openaiapi(f"{prompt2}\n{api_response}")
-        raw_api_responses.append(follow_up_api_response.choices[0].to_dict())  # Save the raw JSON response
-        text_response = follow_up_api_response.choices[0].message['content'].strip()  # Extract the text content
+        #follow_up_api_response = openaiapi(f"{prompt2}\n{api_response}")
+        #raw_api_responses.append(follow_up_api_response.choices[0].to_dict())  # Save the raw JSON response
+        #text_response = follow_up_api_response.choices[0].message['content'].strip()  # Extract the text content
 
 
-        follow_up_questions = follow_up_api_response.choices[0].message['content'].strip().split("\n")
-        for follow_up_question in follow_up_questions:
-            follow_up_api_response = openaiapi(f"{follow_up_question}\n{search_results_text}")
+        #follow_up_questions = follow_up_api_response.choices[0].message['content'].strip().split("\n")
+        #for follow_up_question in follow_up_questions:
+            #follow_up_api_response = openaiapi(f"{follow_up_question}\n{search_results_text}")
 
-            results_df = append_to_dataframe(results_df, text_response)
+            #results_df = append_to_dataframe(results_df, text_response)
 
     st.success("Task Completed")
     st.write(results_df)
