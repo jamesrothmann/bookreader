@@ -4,14 +4,11 @@ import json
 from os.path import exists
 import numpy as np
 import math
-import gspread
-from google.oauth2 import service_account
 from io import StringIO
 import openai
 import pandas as pd
 import math
 import urllib.request
-from gspread_pandas import Spread,Client
 import base64
 #from gsheetsdb import connect
 
@@ -179,22 +176,6 @@ if submit_button:
         content = api_response.choices[0].message['content'].strip()
         df = parse_content_to_dataframe(content)
         st.write(df)
-
-        #prompt2 = f"Think like the best podcast interviewer. What will be the  {num_follow_up_questions} best follow-up questions to ask?\n\nQuestion 1: \n"
-
-        #follow_up_api_response = openaiapi(f"{prompt2}\n{api_response}")
-        #raw_api_responses.append(follow_up_api_response.choices[0].to_dict())
-        
-        #follow_up_api_response = openaiapi(f"{prompt2}\n{api_response}")
-        #raw_api_responses.append(follow_up_api_response.choices[0].to_dict())  # Save the raw JSON response
-        #text_response = follow_up_api_response.choices[0].message['content'].strip()  # Extract the text content
-
-
-        #follow_up_questions = follow_up_api_response.choices[0].message['content'].strip().split("\n")
-        #for follow_up_question in follow_up_questions:
-            #follow_up_api_response = openaiapi(f"{follow_up_question}\n{search_results_text}")
-
-            #results_df = append_to_dataframe(results_df, text_response)
 
     st.success("Task Completed")
     st.write(results_df)
