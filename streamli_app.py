@@ -169,17 +169,13 @@ if submit_button:
         search_results_text = "\n".join(search_results)
         prompt1_with_results = f"{prompt1}\n{search_results_text}"
 
+        
         api_response = openaiapi(prompt1_with_results)
         raw_api_responses.append(api_response.choices[0].to_dict())  # Save the raw JSON response
         text_response = api_response.choices[0].message['content'].strip()  # Extract the text content
         content = api_response.choices[0].message['content'].strip()
         df = parse_content_to_dataframe(content)
-
-    # Concatenate the generated DataFrame with the main results_df
-        results_df = pd.concat([results_df, df], ignore_index=True)
-
-# Display the final, combined DataFrame after processing all the questions
-    st.write(results_df)
+        st.write(df)
 
     st.success("Task Completed")
     st.write(results_df)
@@ -195,5 +191,4 @@ if submit_button:
         download_link = get_download_link(output_filename, text)
         st.markdown(download_link, unsafe_allow_html=True)
 
-    
-    
+   
