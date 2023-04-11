@@ -149,16 +149,10 @@ submit_button = st.button("Submit")
 def append_to_google_sheets(sheet, data):
     data_string = StringIO(data)
     df = pd.read_csv(data_string, sep='|')
-    rows = df.shape[0]
-    cols = df.shape[1]
-    last_row = len(sheet.get_all_values())
-
-    for row in range(rows):
-        values = []
-        for col in range(cols):
-            values.append(df.iloc[row, col])
-
-        sheet.insert_row(values, last_row + 1 + row)
+    # Get the values as a list
+    values = df.values.tolist()
+    # Append the row to the sheet
+    sheet.append_row(values)
 
 if submit_button:
     # Process steps (1) to (5)
