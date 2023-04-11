@@ -14,10 +14,12 @@ import base64
 import gspread
 from google.oauth2 import service_account
 
-def authenticate_and_connect(sheet_name):
-    creds = service_account.Credentials.from_service_account_info(st.secrets["google"], scopes=["https://www.googleapis.com/auth/spreadsheets"])
+def authenticate_and_connect(sheet_id):
+    creds = service_account.Credentials.from_service_account_info(
+        st.secrets["google"], scopes=["https://www.googleapis.com/auth/spreadsheets"]
+    )
     client = gspread.authorize(creds)
-    sheet = client.open(sheet_name)
+    sheet = client.open_by_key(sheet_id)
     return sheet
 
 @st.cache_resource
@@ -163,8 +165,8 @@ def parse_content_to_dataframe(content):
         data.append(row)
     return pd.DataFrame(data, columns=header)
 
-def append_dataframe_to_gsheet(df, sheet_name, worksheet_index=0):
-    sheet = authenticate_and_connect(sheet_name)
+def append_dataframe_to_gsheet(df, sheet_id, worksheet_index=0):
+    sheet = authenticate_and_connect(sheet_id)
     worksheet = sheet.get_worksheet(worksheet_index)
     
     # Convert the DataFrame to a list of rows
@@ -200,7 +202,7 @@ if submit_button:
         content = api_response.choices[0].message['content'].strip()
         df = parse_content_to_dataframe(content)
         st.write(df)
-        google_sheet_name = 'Book Reader App'
+        google_sheet_id = '1P9nwUbiURcdnHdxGwbwKfLn8QPXVoe64U_Te4udUero'
         append_dataframe_to_gsheet(results_df, google_sheet_name)
 
     st.success("Task Completed")
