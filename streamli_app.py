@@ -165,14 +165,14 @@ if submit_button:
         prompt1_with_results = f"{prompt1}\n{search_results_text}"
 
         api_response = openaiapi(prompt1_with_results)
-        raw_api_responses.append(response.choices[0].to_dict())
+        raw_api_responses.append(json.loads(api_response))  # 
 
         results_df = append_to_dataframe(results_df, api_response)
 
         prompt2 = f"Think like the best podcast interviewer. What will be the  {num_follow_up_questions} best follow-up questions to ask?\n\nQuestion 1: \n"
 
         follow_up_api_response = openaiapi(f"{prompt2}\n{api_response}")
-        raw_api_responses.append(response.choices[0].to_dict())
+        raw_api_responses.append(json.loads(follow_up_api_response))
 
         follow_up_questions = follow_up_api_response.split("\n")
         for follow_up_question in follow_up_questions:
