@@ -11,6 +11,7 @@ import openai
 import pandas as pd
 import math
 import urllib.request
+from gsheetsdb import connect
 
 
 @st.cache
