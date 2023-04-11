@@ -176,7 +176,7 @@ if submit_button:
         api_response = openaiapi(prompt1_with_results)
         raw_api_responses.append(api_response.choices[0].to_dict())  # Save the raw JSON response
         text_response = api_response.choices[0].message['content'].strip()  # Extract the text content
-        content = follow_up_api_response.choices[0].message['content'].strip()
+        content = api_response.choices[0].message['content'].strip()
         df = parse_content_to_dataframe(content)
         st.write(df)
 
