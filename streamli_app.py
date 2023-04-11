@@ -165,21 +165,16 @@ def parse_content_to_dataframe(content):
         data.append(row)
     return pd.DataFrame(data, columns=header)
 
-def append_dataframe_to_gsheet(df, sheet_id, worksheet_index=0):
+def append_dataframe_to_gsheet(df, sheet_id):
     sheet = authenticate_and_connect(sheet_id)
-    worksheet = sheet.get_worksheet(worksheet_index)
-    
-    # Convert the DataFrame to a list of rows
-    rows = df.values.tolist()
-    
-    # Add the header row if the worksheet is empty
-    if worksheet.row_count == 0:
-        header = df.columns.tolist()
-        worksheet.append_row(header)
+    worksheet = sheet.get_worksheet(0)  # Assuming you want to append to the first sheet
+    print("Appending data...")  # Debugging print statement
 
-    # Append each row to the worksheet
-    for row in rows:
-        worksheet.append_row(row)
+    for index, row in df.iterrows():
+        print(f"Appending row {index + 1}...")  # Debugging print statement
+        row_data = list(row.values)
+        worksheet.append_row(row_data)
+    print("Data appended successfully")  # Debugging print statement
         
   
 
@@ -203,7 +198,7 @@ if submit_button:
         df = parse_content_to_dataframe(content)
         st.write(df)
         google_sheet_id = '1P9nwUbiURcdnHdxGwbwKfLn8QPXVoe64U_Te4udUero'
-        append_dataframe_to_gsheet(results_df, google_sheet_id)
+        append_dataframe_to_gsheet(df, google_sheet_id)
 
     st.success("Task Completed")
         # ... (existing code) ...
