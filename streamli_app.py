@@ -169,7 +169,7 @@ def parse_content_to_dataframe(content):
     for row in data:
         cleaned_row = []
         for cell in row:
-        cleaned_row.append(cell.replace(',', ";"))
+            cleaned_row.append(cell.replace(',', ";"))
     cleaned_data.append(cleaned_row)
     print("Header:", header)  # Debugging print statement
     print("Data:", data)  # Debugging print statement
