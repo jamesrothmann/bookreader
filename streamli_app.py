@@ -11,6 +11,7 @@ import openai
 import pandas as pd
 import math
 import urllib.request
+from gspread_pandas import Spread,Client
 #from gsheetsdb import connect
 
 
