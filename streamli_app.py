@@ -11,7 +11,7 @@ import openai
 import pandas as pd
 import math
 import urllib.request
-from gsheetsdb import connect
+#from gsheetsdb import connect
 
 
 @st.cache_resource
@@ -34,7 +34,7 @@ credentials = service_account.Credentials.from_service_account_info(
         "https://www.googleapis.com/auth/spreadsheets",
     ],
 )
-conn = connect(credentials=credentials)
+#conn = connect(credentials=credentials)
 
 # Set up the OpenAI API key
 openai.api_key = st.secrets["api_secret"]
