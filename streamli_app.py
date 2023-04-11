@@ -127,7 +127,7 @@ def search(query, embeddings, n=3):
     search_results = []
     for index in results:
         para, title, para_no = index_to_para_chapter_index(index, chapters)
-        search_results.append((para, title, para_no))
+        search_results.append(f"{para} ({title}, para {para_no})")
 
     return search_results
 
