@@ -14,7 +14,7 @@ import urllib.request
 from gsheetsdb import connect
 
 
-@st.cache
+@st.cache_resource
 def download_file():
     url = "https://drive.google.com/uc?export=download&id=1e_bneSaNGhY77Nt07RhTjcMekvwHRGjS"
     path = "file.json"
