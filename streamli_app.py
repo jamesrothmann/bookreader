@@ -158,22 +158,27 @@ def get_download_link(filename, text):
     return f'<a href="data:file/txt;base64,{b64}" download="{filename}">Download {filename}</a>'
 
 def parse_content_to_dataframe(content):
-    lines = content.split("\n")
-    header = lines[0].split("|")[1:-1]  # Get the header row and remove the first and last empty strings
-    data = []
-    for line in lines[2:]:  # Start at index 2 to skip the header and the dashed separator line
-        row = line.split("|")[1:-1]  # Remove the first and last empty strings
-        data.append(row)
-    
+    header, data = [], []
+
+    # Parse header and data from the content
+    for i, line in enumerate(content.strip().split("\n")):
+        line_data = line.strip().split("\t")
+        if i == 0:
+            header = line_data
+            print(f"Header: {header}")  # Print header
+        else:
+            data.append(line_data)
+            print(f"Row {i}: {line_data}")  # Print each row
+
+    # Clean data by replacing double quotes with single quotes
     cleaned_data = []
     for row in data:
         cleaned_row = []
         for cell in row:
-            cleaned_row.append(cell.replace(',', ";"))
-    cleaned_data.append(cleaned_row)
-    print("Header:", header)  # Debugging print statement
-    print("Data:", data)  # Debugging print statement
-    
+            cleaned_row.append(cell.replace('"', "'"))
+        cleaned_data.append(cleaned_row)
+
+    # Create and return the DataFrame
     return pd.DataFrame(cleaned_data, columns=header)
 
 def append_dataframe_to_gsheet(df, sheet_id):
