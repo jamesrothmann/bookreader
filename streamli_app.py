@@ -164,10 +164,17 @@ def parse_content_to_dataframe(content):
     for line in lines[2:]:  # Start at index 2 to skip the header and the dashed separator line
         row = line.split("|")[1:-1]  # Remove the first and last empty strings
         data.append(row)
+    
+    cleaned_data = []
+    for row in data:
+        cleaned_row = []
+        for cell in row:
+        cleaned_row.append(cell.replace(',', ";"))
+    cleaned_data.append(cleaned_row)
     print("Header:", header)  # Debugging print statement
     print("Data:", data)  # Debugging print statement
     
-    return pd.DataFrame(data, columns=header)
+    return pd.DataFrame(cleaned_data, columns=header)
 
 def append_dataframe_to_gsheet(df, sheet_id):
     sheet = authenticate_and_connect(sheet_id)
