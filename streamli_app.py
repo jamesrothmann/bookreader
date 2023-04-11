@@ -11,7 +11,14 @@ import math
 import urllib.request
 import base64
 #from gsheetsdb import connect
+import gspread
+from google.oauth2 import service_account
 
+def authenticate_and_connect(sheet_name):
+    creds = service_account.Credentials.from_service_account_info(st.secrets["google"], scopes=["https://www.googleapis.com/auth/spreadsheets"])
+    client = gspread.authorize(creds)
+    sheet = client.open(sheet_name)
+    return sheet
 
 @st.cache_resource
 def download_file():
@@ -156,6 +163,23 @@ def parse_content_to_dataframe(content):
         data.append(row)
     return pd.DataFrame(data, columns=header)
 
+def append_dataframe_to_gsheet(df, sheet_name, worksheet_index=0):
+    sheet = authenticate_and_connect(sheet_name)
+    worksheet = sheet.get_worksheet(worksheet_index)
+    
+    # Convert the DataFrame to a list of rows
+    rows = df.values.tolist()
+    
+    # Add the header row if the worksheet is empty
+    if worksheet.row_count == 0:
+        header = df.columns.tolist()
+        worksheet.append_row(header)
+
+    # Append each row to the worksheet
+    for row in rows:
+        worksheet.append_row(row)
+        
+  
 
 if submit_button:
     columns = ["Question", "Book/Podcast", "Paragraph/Sentence/Quote", "30 Word Summary", "Tag 1", "Tag 2", "Tag 3", "Tag 4", "Tag 5", "7 Word Problem Summary", "Emotion Triggered", "Counter-Intuitive or Counter-Narrative or Elegant Articulation"]
@@ -176,6 +200,8 @@ if submit_button:
         content = api_response.choices[0].message['content'].strip()
         df = parse_content_to_dataframe(content)
         st.write(df)
+        google_sheet_name = 'Book Reader App'
+        append_dataframe_to_gsheet(results_df, google_sheet_name)
 
     st.success("Task Completed")
         # ... (existing code) ...
