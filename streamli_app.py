@@ -203,7 +203,7 @@ if submit_button:
         df = parse_content_to_dataframe(content)
         st.write(df)
         google_sheet_id = '1P9nwUbiURcdnHdxGwbwKfLn8QPXVoe64U_Te4udUero'
-        append_dataframe_to_gsheet(results_df, google_sheet_name)
+        append_dataframe_to_gsheet(results_df, google_id)
 
     st.success("Task Completed")
         # ... (existing code) ...
