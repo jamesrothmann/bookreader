@@ -179,7 +179,7 @@ if submit_button:
         text_response = follow_up_api_response.choices[0].message['content'].strip()  # Extract the text content
 
 
-        follow_up_questions = follow_up_api_response.split("\n")
+        follow_up_questions = follow_up_api_response.choices[0].message['content'].strip().split("\n")
         for follow_up_question in follow_up_questions:
             follow_up_api_response = openaiapi(f"{follow_up_question}\n{search_results_text}")
 
