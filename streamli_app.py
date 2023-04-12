@@ -24,7 +24,8 @@ def authenticate_and_connect(sheet_id):
 
 @st.cache_resource
 def download_file():
-    url = "https://drive.google.com/uc?export=download&id=1eaypC-XqCGKn56VZRIQdlwsYHwIbQUJr" #Zero to One  - Peter Thiel
+    url = "https://drive.google.com/uc?export=download&id=1lXc7npYfbUW78erBKhiEjRN0AQ6Rk4lD"
+    #url = "https://drive.google.com/uc?export=download&id=1eaypC-XqCGKn56VZRIQdlwsYHwIbQUJr" #Zero to One  - Peter Thiel
     #url = "https://drive.google.com/uc?export=download&id=1e_bneSaNGhY77Nt07RhTjcMekvwHRGjS" #David Senra Podcast Transcripts
     path = "file.json"
 
@@ -213,7 +214,7 @@ if submit_button:
         content = api_response.choices[0].message['content'].strip()
         df = parse_content_to_dataframe(content)
         st.write(df)
-        google_sheet_id = '1P9nwUbiURcdnHdxGwbwKfLn8QPXVoe64U_Te4udUero'
+        google_sheet_id = '1zr9JgBMIUxS8Veq7-LRMSd7KmAP9Q5cqC6jzdUa4UQ0'
         append_dataframe_to_gsheet(df, google_sheet_id)
 
     st.success("Task Completed")
